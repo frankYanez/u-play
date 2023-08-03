@@ -1,47 +1,49 @@
 import React, { useEffect, useState } from 'react'
 import login from '../services/loginHandle'
+import { useForm } from 'react-hook-form'
+import { useAuthContext } from '../context/userContext'
+import { json } from 'react-router-dom'
+import Mockup from './Mockup'
 
-const Login = ({user, setUser}) => {
-    const [userName, setUserName] = useState('')
-    const [userPassword, setUserPassword] = useState('')
-    
-
-    useEffect(()=>{
-      const userJsonLogged = localStorage.getItem('userLogged')
-
-      if (userJsonLogged) {
-        const user = JSON.parse(userJsonLogged)
-        setUser(user)
-      }
-    },[])
+const Login = () => {
+  const { register, handleSubmit } = useForm()
+  const { signIn } = useAuthContext()
 
 
-    const handleSubmit = async (e)=>{
-        e.preventDefault()
-        const user = await login({email:userName,password:userPassword})
+  const onSubmit = handleSubmit(async (data) => {
+    signIn(data)
+    localStorage.setItem('userLogged', JSON.stringify(data))
+  })
 
-        user ? localStorage.setItem('userLogged', JSON.stringify(user)) : console.log('No hay usuario');
-        setUser(user) 
-        setUserName('')
-        setUserPassword('')
 
-    }
+
+
+  // const handleSubmit = async (e)=>{
+  //     e.preventDefault()
+  //     const user = await login({email:userName,password:userPassword})
+
+  //     user ? localStorage.setItem('userLogged', JSON.stringify(user)) : console.log('No hay usuario');
+  //     setUser(user) 
+  //     setUserName('')
+  //     setUserPassword('')
+
+  // }
   return (
     <div>
-        <form onSubmit={handleSubmit}>
-            <input type="text"
-            value={userName}
-            name='userName'
-            placeholder='User name'
-            onChange={(e)=> setUserName(e.target.value)}
-            />
-            <input type="password"
-            value={userPassword}
-            name='userName'
-            onChange={(e)=> setUserPassword(e.target.value)}
-            />
-            <button>Login</button>
-        </form>
+      <form onSubmit={onSubmit}>
+        <input type="text"
+          placeholder='User name'
+
+          {...register('email', { required: true })}
+        />
+        <input type="password"
+          {...register('password', { required: true })}
+        />
+        <button>Login</button>
+
+        <Mockup />
+      </form>
+
     </div>
   )
 }

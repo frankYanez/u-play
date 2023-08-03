@@ -1,9 +1,9 @@
 import mongoose from "mongoose";
 
 
-export const dbConnect = ()=>{
-    const DB_URI = process.env.MONGO_URI;
+export const dbConnect = () => {
+    const DB_URI = "mongodb+srv://frankyanez9413:FfNYEsZVj8UlP3nh@u-play.q17ha7v.mongodb.net/?retryWrites=true&w=majority";
     mongoose.connect(DB_URI)
-    .then(()=> console.log('connected'))
-    .catch(err => console.log(err))
+        .then(() => console.log('connected'))
+        .catch(err => console.log(err))
 }
