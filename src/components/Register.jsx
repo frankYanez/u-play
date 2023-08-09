@@ -16,7 +16,7 @@ const Register = () => {
   });
 
   return (
-    <div>
+    <section>
       <form className='flex flex-col items-center px-12 gap-6' onSubmit={onSubmit}>
         <input type="text" placeholder='Nombre' {...register('nombre', { required: true })} />
         {
@@ -26,7 +26,7 @@ const Register = () => {
         <input type="password" placeholder='Password' {...register('password', { required: true })} />
         <button>Register</button>
       </form>
-    </div>
+    </section>
   )
 }
 
