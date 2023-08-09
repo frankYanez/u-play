@@ -4,8 +4,8 @@ import { createSong, deleteSong, getSongs, updateSong } from "../controllers/son
 const router = Router()
 
 
-router.get('/songs', validateToken, getSongs )
-router.post('/songs', validateToken, createSong )
+router.get('/songs', getSongs)
+router.post('/songs', createSong)
 router.delete('/songs/:id', validateToken, deleteSong)
 router.put('/songs/:id', validateToken, updateSong)
 export default router

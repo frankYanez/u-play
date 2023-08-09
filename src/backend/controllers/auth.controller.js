@@ -1,6 +1,7 @@
 import { UserModel } from "../models/user.model.js"
 import bcrypt from 'bcrypt'
 import { generateToken } from "../utils/generateToken.js"
+import Cookies from "js-cookie"
 
 
 //Funcion para registrar
@@ -9,6 +10,10 @@ export const register = async (req, res) => {
         //Del body extraemos los campos
         const { nombre, email, password } = req.body
 
+        const user = await UserModel.findOne({ email })
+
+        console.log("veamos si hay" + user);
+
         //Hasheamos la contraseña
         const hashPassword = await bcrypt.hash(password, 10)
         const newUser = new UserModel({
@@ -16,17 +21,25 @@ export const register = async (req, res) => {
             email,
             password: hashPassword
         })
-        if (!UserModel.findOne({ email })) {
 
+
+
+
+        if (user) {
+
+            return res.status(409).json('Usuario existente')
+
+        } else {
             const userSaved = await newUser.save()
 
             const token = await generateToken(userSaved._id)
 
-            res.cookie("token", token)
+            res.cookie("token", token, {
+                domain: 'localhost',
+                httpOnly: true,
+                sameSite: 'none'
+            })
             res.send({ userSaved, token })
-        } else {
-            return res.status(409).json('Usuario existente')
-
         }
 
     } catch (error) {
@@ -40,6 +53,7 @@ export const login = async (req, res) => {
     const { email, password } = req.body
 
 
+
     const user = await UserModel.findOne({ email })
 
     if (!user) {
@@ -49,13 +63,17 @@ export const login = async (req, res) => {
     const passwordMatched = await bcrypt.compare(password, user.password)
 
     if (!passwordMatched) {
-        return res.json('Contraseña incorrecta')
+        return res.status(401).json('Usuario o Contraseña incorrecta')
     }
 
     const token = await generateToken(user._id)
 
-    res.cookie('token', token)
+    Cookies.set('token', token)
+
+
     res.json({ token, user })
+
+    console.log(req.cookies.token);
 
 }
 

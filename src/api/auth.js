@@ -1,15 +1,24 @@
 import axios from "axios";
+import Cookies from "js-cookie";
 
 const baseURL = 'http://localhost:3001'
 
 export const registerUser = (user) => {
 
     const response = axios.post(`${baseURL}/register`, user)
-    console.log(response);
+
+    return response.data
 }
 
 export const loginUser = async (user) => {
-    console.log(user);
-    const { data } = await axios.post(`${baseURL}/login`, user)
-    console.log(data);
+
+    const response = await axios.post(`${baseURL}/login`, user)
+    const token = Cookies.get('token')
+    console.log(token);
+
+    return response.data
+
+
+
+
 }

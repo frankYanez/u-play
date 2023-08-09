@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import login from '../services/loginHandle'
 import { useForm } from 'react-hook-form'
 import { useAuthContext } from '../context/userContext'
 import { json } from 'react-router-dom'
@@ -29,19 +28,20 @@ const Login = () => {
 
   // }
   return (
-    <div>
-      <form onSubmit={onSubmit}>
+    <div >
+      <form className='flex flex-col items-center px-12 gap-6' onSubmit={onSubmit}>
         <input type="text"
           placeholder='User name'
 
           {...register('email', { required: true })}
         />
         <input type="password"
+          placeholder='Password'
           {...register('password', { required: true })}
         />
-        <button>Login</button>
+        <button className='border border-white rounded-2xl  px-12 '>Login</button>
 
-        <Mockup />
+
       </form>
 
     </div>

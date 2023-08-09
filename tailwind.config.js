@@ -6,6 +6,11 @@ export default {
   ],
   theme: {
     extend: {
+      extend: {
+        "u-button": {
+          backgroundColor: 'black',
+        }
+      },
       backgroundImage: {
         'bg-mockup': "url('/images/mockup-home.png')"
       }
